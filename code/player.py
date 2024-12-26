@@ -54,39 +54,43 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        #directions
-        if keys[pygame.K_UP]:
-            self.direction.y = -1
-            self.status = 'up'
-        elif keys[pygame.K_DOWN]:
-            self.direction.y = 1
-            self.status = 'down'
-        else:
-            self.direction.y = 0
+        if not self.timers['tool_use'].active:
+            #directions
+            if keys[pygame.K_UP]:
+                self.direction.y = -1
+                self.status = 'up'
+            elif keys[pygame.K_DOWN]:
+                self.direction.y = 1
+                self.status = 'down'
+            else:
+                self.direction.y = 0
+                
+            if keys[pygame.K_RIGHT]:
+                self.direction.x = 1
+                self.status = 'right'
+            elif keys[pygame.K_LEFT]:
+                self.direction.x = -1
+                self.status = 'left'
+            else:
+                self.direction.x = 0
             
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = 1
-            self.status = 'right'
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
-            self.status = 'left'
-        else:
-            self.direction.x = 0
-        
-        #tool usage
-        if keys[pygame.K_SPACE]:
-            #if condition is true - run timer for tool use - If player uses tool then add the status to the action
-            self.timers['tool_use'].activate()
+            #tool usage
+            if keys[pygame.K_SPACE]:
+                #if condition is true - run timer for tool use - If player uses tool then add the status to the action
+                self.timers['tool_use'].activate()
+                #if player is moving to right  - player will keep moving to right when using tool, its not allowed to use any input
+                self.direction = pygame.math.Vector2()
 
     def get_status(self):
-        #if the player is not moving:
+        #if the player is not moving (idle):
         if self.direction.magnitude() == 0:
             #add _idle to the status (manipulate string to get status with idle)
             self.status = self.status.split('_')[0] + '_idle'
 
         #tool use 
         if self.timers['tool_use'].active:
-            print('tool is being used')
+            self.status = self.status.split('_')[0] + '_' + self.selected_tool
+
 
     def move(self,dt):
 
