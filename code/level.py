@@ -74,7 +74,7 @@ class CameraGroup(pygame.sprite.Group):
 
         # Drawing sprites based on their layers
         for layer in LAYERS.values():
-            for sprite in self.sprites():
+            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
                 if sprite.z == layer:
                     # Create a new rect with the updated offset
                     offset_rect = sprite.rect.copy()  # Copy the sprite's rect
