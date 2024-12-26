@@ -3,7 +3,7 @@ import pygame.camera
 from settings import *
 from player import Player
 from overlay import Overlay
-from sprites import Generic, Water
+from sprites import Generic, Water, WildFlower
 from pytmx.util_pygame import load_pygame
 from support import * 
 
@@ -42,6 +42,8 @@ class Level:
         #trees
 
         #wildflowers
+        for obj in tmx_data.get_layer_by_name('Decoration'):
+                WildFlower((obj.x, obj.y), obj.image, self.all_sprites)
 
         Generic(pos = (0,0), 
                 surf = pygame.image.load('graphics/world/ground.png').convert_alpha(),
