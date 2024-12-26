@@ -1,13 +1,14 @@
 import pygame
 from settings import *
 from support import * 
+from timer1 import Timer
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
 
         self.import_assets()
-        self.status = 'down_idle'
+        self.status = 'down'
         self.frame_index = 0 
 
         #general setup
@@ -18,6 +19,18 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 200
+
+        #timers
+        self.timers = {
+            'tool_use': Timer(350,self.use_tool)
+        }
+
+        #Tools usage
+        self.selected_tool = 'axe'
+
+    def use_tool(self):
+
+        print(self.selected_tool)
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -41,6 +54,7 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
+        #directions
         if keys[pygame.K_UP]:
             self.direction.y = -1
             self.status = 'up'
@@ -58,7 +72,22 @@ class Player(pygame.sprite.Sprite):
             self.status = 'left'
         else:
             self.direction.x = 0
-    
+        
+        #tool usage
+        if keys[pygame.K_SPACE]:
+            #if condition is true - run timer for tool use - If player uses tool then add the status to the action
+            self.timers['tool_use'].activate()
+
+    def get_status(self):
+        #if the player is not moving:
+        if self.direction.magnitude() == 0:
+            #add _idle to the status (manipulate string to get status with idle)
+            self.status = self.status.split('_')[0] + '_idle'
+
+        #tool use 
+        if self.timers['tool_use'].active:
+            print('tool is being used')
+
     def move(self,dt):
 
         #normalizing a vector
@@ -75,5 +104,6 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.input()
+        self.get_status()
         self.move(dt)
         self.animate(dt)
