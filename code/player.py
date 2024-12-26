@@ -91,6 +91,9 @@ class Player(pygame.sprite.Sprite):
         if self.timers['tool_use'].active:
             self.status = self.status.split('_')[0] + '_' + self.selected_tool
 
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
 
     def move(self,dt):
 
@@ -109,5 +112,6 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.get_status()
+        self.update_timers()
         self.move(dt)
         self.animate(dt)
