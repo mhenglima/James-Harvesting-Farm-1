@@ -80,6 +80,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers['tool_use'].activate()
                 #if player is moving to right  - player will keep moving to right when using tool, its not allowed to use any input
                 self.direction = pygame.math.Vector2()
+                self.frame_index = 0 
 
     def get_status(self):
         #if the player is not moving (idle):
