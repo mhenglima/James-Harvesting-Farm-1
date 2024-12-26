@@ -22,8 +22,10 @@ class Player(pygame.sprite.Sprite):
 
         #timers
         self.timers = {
-            'tool_use': Timer(350,self.use_tool),
-            'tool switch': Timer(200)
+            'tool use': Timer(350,self.use_tool),
+            'tool switch': Timer(200),
+            'seed use': Timer(350,self.use_seed),
+            'seed switch': Timer(200)
         }
 
         #Tools usage
@@ -31,10 +33,18 @@ class Player(pygame.sprite.Sprite):
         self.tool_index = 0 
         self.selected_tool = self.tools[self.tool_index]
 
+        #Seed usage
+        self.seeds = ['corn', 'tomato']
+        self.seed_index = 0
+        self.selected_seed = self.seeds[self.seed_index]
+
     def use_tool(self):
+        pass
+        #print(self.selected_tool)
 
-        print(self.selected_tool)
-
+    def use_seed(self):
+        pass
+        
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
                            'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
@@ -57,7 +67,7 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.timers['tool_use'].active:
+        if not self.timers['tool use'].active:
             #directions
             if keys[pygame.K_UP]:
                 self.direction.y = -1
@@ -80,7 +90,7 @@ class Player(pygame.sprite.Sprite):
             #tool usage
             if keys[pygame.K_SPACE]:
                 #if condition is true - run timer for tool use - If player uses tool then add the status to the action
-                self.timers['tool_use'].activate()
+                self.timers['tool use'].activate()
                 #if player is moving to right  - player will keep moving to right when using tool, its not allowed to use any input
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0 
@@ -93,6 +103,24 @@ class Player(pygame.sprite.Sprite):
                 self.tool_index = self.tool_index if self.tool_index < len(self.tools) else 0 
                 self.selected_tool = self.tools[self.tool_index]
 
+            #seed use 
+            if keys[pygame.K_LCTRL]:
+                #if condition is true - run timer for tool use - If player uses tool then add the status to the action
+                self.timers['seed use'].activate()
+                #if player is moving to right  - player will keep moving to right when using tool, its not allowed to use any input
+                self.direction = pygame.math.Vector2()
+                self.frame_index = 0 
+                print('use seed')
+
+            #change seed
+            if keys[pygame.K_e] and not self.timers['seed switch'].active:
+                self.timers['seed switch'].activate()
+                self.seed_index += 1
+                #if tool index > length of tools  => tool index to 0
+                self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0 
+                self.selected_seed = self.seeds[self.seed_index]
+                print(self.selected_seed)
+
     def get_status(self):
         #if the player is not moving (idle):
         if self.direction.magnitude() == 0:
@@ -100,7 +128,7 @@ class Player(pygame.sprite.Sprite):
             self.status = self.status.split('_')[0] + '_idle'
 
         #tool use 
-        if self.timers['tool_use'].active:
+        if self.timers['tool use'].active:
             self.status = self.status.split('_')[0] + '_' + self.selected_tool
 
     def update_timers(self):
