@@ -14,7 +14,7 @@ class Level:
 
         #sprite groups (allte players, trees etc)
         self.all_sprites = CameraGroup()
-        self.collisions_sprites = pygame.sprite.Group() #keep a track which sprite is collidable
+        self.collision_sprites = pygame.sprite.Group() #keep a track which sprite is collidable
 
         self.setup()
         #create after the setup of the player
@@ -26,37 +26,43 @@ class Level:
         #house
         for layer in ['HouseFloor', 'HouseFurnitureBottom']:
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
-                Generic((x * TITLE_SIZE, y* TITLE_SIZE), surf, self.all_sprites, LAYERS['house bottom'])
+                Generic((x * TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, LAYERS['house bottom'])
         
         for layer in ['HouseWalls', 'HouseFurnitureTop']:
                     for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
-                        Generic((x * TITLE_SIZE, y* TITLE_SIZE), surf, self.all_sprites, LAYERS['main'])
+                        Generic((x * TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, LAYERS['main'])
         #fence
         for x, y, surf in tmx_data.get_layer_by_name('Fence').tiles():
-            Generic((x * TITLE_SIZE, y* TITLE_SIZE), surf, [self.all_sprites, self.collisions_sprites])
+            Generic((x * TILE_SIZE, y* TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
 
         #water
         water_frames = import_folder('graphics/water')
         for x, y, surf in tmx_data.get_layer_by_name('Water').tiles():
-            Water((x * TITLE_SIZE, y * TITLE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
+            Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
              
         #trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collisions_sprites], obj.name)
+            Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites], obj.name)
 
         #wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration'):
-                WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collisions_sprites])
+                WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
+
+        #collusions tiles
+        for x, y, surf in tmx_data.get_layer_by_name('Collision').tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), pygame.Surface((TILE_SIZE, TILE_SIZE)), self.collision_sprites)
+        
+        #Player 
+        for obj in tmx_data.get_layer_by_name('Player'):
+             if obj.name == 'Start':
+                self.player = Player((obj.x, obj.y), self.all_sprites, self.collision_sprites) #seperate group for collision - Not inside all_sprites
+
 
         Generic(pos = (0,0), 
                 surf = pygame.image.load('graphics/world/ground.png').convert_alpha(),
                 groups = self.all_sprites,
                 z = LAYERS['ground'])
 
-        #Player 
-        for obj in tmx_data.get_layer_by_name('Player'):
-             if obj.name == 'Start':
-                self.player = Player((obj.x, obj.y), self.all_sprites, self.collisions_sprites) #seperate group for collision - Not inside all_sprites
 
     def run(self,dt):
         self.display_surface.fill('black')
