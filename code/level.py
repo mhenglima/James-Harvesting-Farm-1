@@ -1,5 +1,4 @@
 import pygame
-import pygame.camera
 from settings import *
 from player import Player
 from overlay import Overlay
@@ -15,6 +14,7 @@ class Level:
         #sprite groups (allte players, trees etc)
         self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group() #keep a track which sprite is collidable
+        self.tree_sprites = pygame.sprite.Group()
 
         self.setup()
         #create after the setup of the player
@@ -29,8 +29,9 @@ class Level:
                 Generic((x * TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, LAYERS['house bottom'])
         
         for layer in ['HouseWalls', 'HouseFurnitureTop']:
-                    for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
-                        Generic((x * TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, LAYERS['main'])
+            for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
+                Generic((x * TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, LAYERS['main'])
+
         #fence
         for x, y, surf in tmx_data.get_layer_by_name('Fence').tiles():
             Generic((x * TILE_SIZE, y* TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
@@ -39,32 +40,37 @@ class Level:
         water_frames = import_folder('graphics/water')
         for x, y, surf in tmx_data.get_layer_by_name('Water').tiles():
             Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
-             
+
         #trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites], obj.name)
+            Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.tree_sprites], obj.name, self.all_sprites)
 
         #wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration'):
-                WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
+            WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
 
         #collusions tiles
         for x, y, surf in tmx_data.get_layer_by_name('Collision').tiles():
             Generic((x * TILE_SIZE, y * TILE_SIZE), pygame.Surface((TILE_SIZE, TILE_SIZE)), self.collision_sprites)
         
-        #Player 
+        # Player 
         for obj in tmx_data.get_layer_by_name('Player'):
-             if obj.name == 'Start':
-                self.player = Player((obj.x, obj.y), self.all_sprites, self.collision_sprites) #seperate group for collision - Not inside all_sprites
+            if obj.name == 'Start':
+                # DEBUG: Print tree_sprites before passing to Player
+                print("tree_sprites in Level setup:", self.tree_sprites)
+                self.player = Player(
+                    pos = (obj.x,obj.y), 
+                    group = self.all_sprites, 
+                    collision_sprites = self.collision_sprites,
+                    tree_sprites = self.tree_sprites)
 
-
-        Generic(pos = (0,0), 
+        Generic(pos = (0, 0), 
                 surf = pygame.image.load('graphics/world/ground.png').convert_alpha(),
                 groups = self.all_sprites,
                 z = LAYERS['ground'])
 
 
-    def run(self,dt):
+    def run(self, dt):
         self.display_surface.fill('black')
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
@@ -82,13 +88,11 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
 
-        # Drawing sprites based on their layers
-        for layer in LAYERS.values():
-            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
-                if sprite.z == layer:
-                    # Create a new rect with the updated offset
-                    offset_rect = sprite.rect.copy()  # Copy the sprite's rect
-                    offset_rect.center -= self.offset  # Apply the offset to the rect center
-                    self.display_surface.blit(sprite.image, offset_rect)  # Draw the sprite using the offset rect
-
-    
+        # Loop through all layers and draw sprites in those layers
+        for layer_name, layer_value in sorted(LAYERS.items(), key=lambda x: x[1]):  # Sort layers by value
+            for sprite in sorted(self.sprites(), key=lambda sprite: sprite.z):  # Sort sprites by their z value
+                if sprite.z == layer_value:
+                    # Apply the camera offset
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    self.display_surface.blit(sprite.image, offset_rect)
