@@ -89,14 +89,14 @@ class Tree(Generic):
 
     def create_particle_effect(self, apple):
         # Create a particle effect when an apple "dies"
-        print(f"Creating particle effect at {apple.rect.topleft}")  # Debugging the particle creation
+        #print(f"Creating particle effect at {apple.rect.topleft}")  # Debugging the particle creation
         particle = Particle(
             pos=apple.rect.topleft, 
             surf=apple.image, 
             groups=[self.all_sprites],  # Add to the main sprite group
             z=LAYERS['fruit']
         )
-        print(f"Particle added to group, total sprites: {len(self.all_sprites.sprites())}")  # Debug output
+        #print(f"Particle added to group, total sprites: {len(self.all_sprites.sprites())}")  # Debug output
 
 
     def remove_apple(self, apple):
@@ -133,7 +133,7 @@ class Tree(Generic):
                     z=LAYERS['fruit']  # Apples should be rendered in the 'fruit' layer
                 )
                 self.all_sprites.add(apple)  # Add the apple to the main all_sprites group
-                print(f"Apple created at {x}, {y}")  # Debug output
+                #print(f"Apple created at {x}, {y}")  # Debug output
 
     def update(self, dt):
         if self.alive:
@@ -144,8 +144,8 @@ class Tree(Generic):
             if randint(0, 10) < 4:
                 x = pos[0] + self.rect.left
                 y = pos[1] + self.rect.top
-                print(f"Creating apple at position: {x}, {y}")  # Debug output
-                print(f"Apple sprites: {len(self.apple_sprites.sprites())}")  # This should show how many apples are in the group.
+                #print(f"Creating apple at position: {x}, {y}")  # Debug output
+                #print(f"Apple sprites: {len(self.apple_sprites.sprites())}")  # This should show how many apples are in the group.
 
                 apple = Generic(
                     pos=(x, y),
@@ -156,6 +156,6 @@ class Tree(Generic):
                 # Add the apple to the all_sprites group
                 self.all_sprites.add(apple)  # Add to the main all_sprites group
 
-                print(f"Apple sprites after creation: {len(self.apple_sprites)}")  # Debug print to track apple count
+                #print(f"Apple sprites after creation: {len(self.apple_sprites)}")  # Debug print to track apple count
 
 

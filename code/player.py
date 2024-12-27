@@ -67,7 +67,7 @@ class Player(pygame.sprite.Sprite):
                 if isinstance(tree, Tree):  # Check if tree is an instance of the Tree class
                     if tree.rect.collidepoint(self.target_pos):
                         if pygame.key.get_pressed()[pygame.K_SPACE]:  # Check if the player presses the spacebar to cut the tree
-                            print("Cutting tree down")  # For debugging
+                            #print("Cutting tree down")  # For debugging
                             tree.damage()
         
         if self.selected_tool == 'water':
