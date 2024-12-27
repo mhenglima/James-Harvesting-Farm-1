@@ -18,7 +18,7 @@ class Level:
 
         self.setup()
         #create after the setup of the player
-        self.overlay = Overlay(self.player)
+        self.overlay = Overlay(self.player, self.display_surface)
     
     def setup(self):
         tmx_data = load_pygame('data/map.tmx')
@@ -57,7 +57,7 @@ class Level:
         for obj in tmx_data.get_layer_by_name('Player'):
             if obj.name == 'Start':
                 # DEBUG: Print tree_sprites before passing to Player
-                print("tree_sprites in Level setup:", self.tree_sprites)
+                #print("tree_sprites in Level setup:", self.tree_sprites)
                 self.player = Player(
                     pos = (obj.x,obj.y), 
                     group = self.all_sprites, 
@@ -77,8 +77,10 @@ class Level:
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
 
+        # Display inventory
         self.overlay.display()
-        print(self.player.item_inventory)
+        pygame.display.update()
+        #print(self.player.item_inventory)
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self, *sprites):
