@@ -98,7 +98,6 @@ class Tree(Generic):
         )
         #print(f"Particle added to group, total sprites: {len(self.all_sprites.sprites())}")  # Debug output
 
-
     def remove_apple(self, apple):
         # Change the apple's image to indicate it is destroyed (or use a placeholder image)
         destroyed_image = pygame.Surface((apple.rect.width, apple.rect.height))
@@ -116,10 +115,6 @@ class Tree(Generic):
             self.hitbox = self.rect.copy().inflate(-10, -self.rect.height * 0.6)
             self.alive = False
             self.player_add('wood')
-
-    def update(self, dt):
-        if self.alive:
-            self.check_death()
 
     def create_fruit(self):
         for pos in self.apple_pos:
