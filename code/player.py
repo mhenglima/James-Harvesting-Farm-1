@@ -45,6 +45,15 @@ class Player(pygame.sprite.Sprite):
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
+        #Inventory
+        self.item_inventory = {
+            'wood':   0,
+            'apple':  0,
+            'corn':   0,
+            'tomato': 0
+        }
+        
+
         # Initialize tree_sprites (this is the fix)
         self.tree_sprites = tree_sprites
 
@@ -63,7 +72,6 @@ class Player(pygame.sprite.Sprite):
         
         if self.selected_tool == 'water':
             pass
-
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]

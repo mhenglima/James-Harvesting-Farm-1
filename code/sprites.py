@@ -39,7 +39,7 @@ class WildFlower(Generic):
         self.hitbox = self.rect.copy().inflate((-20, -self.rect.height * 0.9))
 
 class Particle(Generic):
-    def __init__(self, pos, surf, groups, z, duration = 20):
+    def __init__(self, pos, surf, groups, z, duration = 200):
         super().__init__(pos, surf, groups, z)
         self.start_time = pygame.time.get_ticks()
         self.duration = duration
@@ -56,9 +56,8 @@ class Particle(Generic):
         if elapsed_time > self.duration:
             self.kill()
 
-
 class Tree(Generic):
-    def __init__(self, pos, surf, groups, name, all_sprites):
+    def __init__(self, pos, surf, groups, name, all_sprites, player_add):
         super().__init__(pos, surf, groups)
         self.all_sprites = all_sprites
         
@@ -75,6 +74,8 @@ class Tree(Generic):
         self.apple_sprites = pygame.sprite.Group()
         self.create_fruit()
 
+        self.player_add = player_add
+
     def damage(self):
         # Damaging the tree
         self.health -= 1
@@ -83,12 +84,13 @@ class Tree(Generic):
         if len(self.apple_sprites.sprites()) > 0:
             random_apple = choice(self.apple_sprites.sprites())  # Randomly pick an apple
             self.create_particle_effect(random_apple)  # Create particle effect at the apple's position
-            self.remove_apple(random_apple)  # Remove the apple from the game
+            self.player_add('apple')  # Add an apple to the player's inventory
+            #self.remove_apple(random_apple)  # Remove the apple from the game
 
     def create_particle_effect(self, apple):
         # Create a particle effect when an apple "dies"
         print(f"Creating particle effect at {apple.rect.topleft}")  # Debugging the particle creation
-        Particle(
+        particle = Particle(
             pos=apple.rect.topleft, 
             surf=apple.image, 
             groups=[self.all_sprites],  # Add to the main sprite group
@@ -100,18 +102,20 @@ class Tree(Generic):
     def remove_apple(self, apple):
         # Change the apple's image to indicate it is destroyed (or use a placeholder image)
         destroyed_image = pygame.Surface((apple.rect.width, apple.rect.height))
-        destroyed_image.fill((255, 255, 255))  # White color for destroyed apple (or use a specific "destroyed" image)
-        apple.image = destroyed_image  # Replace the apple's image
+        #destroyed_image.fill((255, 255, 255))  # White color for destroyed apple (or use a specific "destroyed" image)
+        #apple.image = destroyed_image  # Replace the apple's image
 
         # Optionally, remove the apple sprite after some time or instantly
-        apple.kill()
+        #apple.kill()
 
     def check_death(self):
         if self.health <= 0:
+            #Particle(self.rect.topleft, self.image, [self.all_sprites], LAYERS['fruit'], 2000)
             self.image = self.stump_surf
             self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
             self.hitbox = self.rect.copy().inflate(-10, -self.rect.height * 0.6)
             self.alive = False
+            self.player_add('wood')
 
     def update(self, dt):
         if self.alive:
@@ -130,13 +134,6 @@ class Tree(Generic):
                 )
                 self.all_sprites.add(apple)  # Add the apple to the main all_sprites group
                 print(f"Apple created at {x}, {y}")  # Debug output
-
-    def check_death(self):
-        if self.health <= 0:
-            self.image = self.stump_surf
-            self.rect = self.image.get_rect(midbottom=self.rect.midbottom)
-            self.hitbox = self.rect.copy().inflate(-10, -self.rect.height * 0.6)
-            self.alive = False
 
     def update(self, dt):
         if self.alive:
