@@ -152,6 +152,14 @@ class Player(pygame.sprite.Sprite):
                         self.rect.centerx = self.hitbox.centerx
                         self.pos.x = self.hitbox.centerx
 
+                    if direction == 'vertical':
+                        if self.direction.y > 0:  # Moving down
+                            self.hitbox.bottom = sprites.hitbox.top  # Use sprites
+                        if self.direction.y < 0:  # Moving up
+                            self.hitbox.top = sprites.hitbox.bottom  # Use sprites
+                        self.rect.centery = self.hitbox.centery
+                        self.pos.y = self.hitbox.centery
+
     def move(self,dt):
 
         #normalizing a vector
@@ -168,6 +176,7 @@ class Player(pygame.sprite.Sprite):
         self.pos.y += self.direction.y * self.speed * dt
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
+        self.collision('vertical')
 
     def update(self, dt):
         self.input()
