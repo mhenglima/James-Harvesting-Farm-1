@@ -53,7 +53,10 @@ class Level:
                 groups = self.all_sprites,
                 z = LAYERS['ground'])
 
-        self.player = Player((640,360), self.all_sprites, self.collisions_sprites) #seperate group for collision - Not inside all_sprites
+        #Player 
+        for obj in tmx_data.get_layer_by_name('Player'):
+             if obj.name == 'Start':
+                self.player = Player((obj.x, obj.y), self.all_sprites, self.collisions_sprites) #seperate group for collision - Not inside all_sprites
 
     def run(self,dt):
         self.display_surface.fill('black')
