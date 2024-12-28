@@ -92,13 +92,13 @@ class Level:
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
 
+        if self.player.sleep:
+            self.transition.play()
+
         # Display inventory
         self.overlay.display()
         pygame.display.update()
         #print(self.player.item_inventory)
-
-        if self.player.sleep:
-            self.transition.play()
 
 
 class CameraGroup(pygame.sprite.Group):
