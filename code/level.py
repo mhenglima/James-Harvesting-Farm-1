@@ -46,7 +46,9 @@ class Level:
 
         #trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.tree_sprites], obj.name, self.all_sprites,self.player_add)
+            tree=Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.tree_sprites], obj.name, self.all_sprites,self.player_add)
+
+        self.tree_sprites.add(tree)  # Make sure you're adding the Tree object, not a Generic one
 
         #wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration'):
@@ -80,11 +82,11 @@ class Level:
         self.player.item_inventory[item] += 1
 
     def reset(self):
-
         #apples on trees
         for tree in self.tree_sprites.sprites():
-            for apple in tree.apple_sprites.sprites():
-                apple.kill()
+            if isinstance(tree, Tree):  # Ensure the object is an instance of Tree
+                for apple in tree.apple_sprites.sprites():
+                    apple.kill()
             tree.create_fruit()
 
     def run(self, dt):
@@ -99,6 +101,9 @@ class Level:
         self.overlay.display()
         pygame.display.update()
         #print(self.player.item_inventory)
+
+        #if self.player.sleep:
+            #self.transition.play()
 
 
 class CameraGroup(pygame.sprite.Group):
