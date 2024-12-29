@@ -88,6 +88,10 @@ class Level:
         self.player.item_inventory[item] += 1
 
     def reset(self):
+
+        #Soil
+        self.soil_layer.remove_water()
+
         #apples on trees
         for tree in self.tree_sprites.sprites():
             if isinstance(tree, Tree):  # Ensure the object is an instance of Tree
