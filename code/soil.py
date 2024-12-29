@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from pytmx.util_pygame import load_pygame
 from support import *
+from random import choice
 
 class SoilTile(pygame.sprite.Sprite):
     def __init__ (self, pos, surf, groups):
@@ -12,16 +13,25 @@ class SoilTile(pygame.sprite.Sprite):
 
         self.add(groups)
 
+class WaterTile(pygame.sprite.Sprite):
+    def __init__ (self,pos,surf,groups):
+        super().__init__(groups)
+        self.image = surf
+        self.rect = self.image.get_rect(topleft = pos)
+        self.z = LAYERS['soil water']
+
 class SoilLayer():
     def __init__(self, all_sprites):
         # sprite groups
         self.all_sprites = all_sprites
         self.soil_sprites = pygame.sprite.Group()
+        self.water_sprites = pygame.sprite.Group()
 
         # graphics
         self.soil_surf = pygame.image.load('graphics/soil/o.png')
         self.soil_surfs = import_folder_dict('graphics/soil/')  #cant use the import file, as this uses all of them without an order so we need to use an actual order
         #print(self.soil_surfs)
+        self.water_surfs = import_folder('graphics/soil_water')
 
         self.create_soil_grid()
         self.create_hit_rects()
@@ -58,6 +68,22 @@ class SoilLayer():
                     #print('Farmable')
                     self.grid[y][x].append('X')  # Add 'X' to the list to indicate that it has been hit 
                     self.create_soil_tiles()
+
+    #hit the soil with the water
+    def water(self, target_pos): 
+        for soil_sprites in self.soil_sprites:
+            if soil_sprites.rect.collidepoint(target_pos):
+                #print('Soil tile watered')
+                #Add entry to the soil to convert to Watered soil
+                x = soil_sprites.rect.x // TILE_SIZE
+                y = soil_sprites.rect.y // TILE_SIZE
+                self.grid[x][y].append('W') #add water to the soil
+
+                #create a water sprite
+                pos = soil_sprites.rect.topleft
+                surf = choice(self.water_surfs)
+                WaterTile(pos, surf,[self.all_sprites, self.water_sprites])
+
 
     def create_soil_tiles(self):
         self.soil_sprites.empty()
@@ -102,3 +128,4 @@ class SoilLayer():
                         pos = (index_col * TILE_SIZE, index_row * TILE_SIZE), 
                         surf = self.soil_surfs[tile_type], 
                         groups = [self.all_sprites, self.soil_sprites])
+

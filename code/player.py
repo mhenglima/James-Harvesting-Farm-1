@@ -74,8 +74,9 @@ class Player(pygame.sprite.Sprite):
                             #print("Cutting tree down")  # For debugging
                             tree.damage()
         
-        if self.selected_tool == 'water':
-            pass
+        if self.selected_tool == 'water' and pygame.key.get_pressed()[pygame.K_SPACE]:
+            self.soil_layer.water(self.target_pos)
+
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
