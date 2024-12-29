@@ -8,6 +8,7 @@ from support import *
 from transition import Transition
 from soil import SoilLayer
 from sky import * 
+from random import *
 
 class Level:
     def __init__(self):
@@ -28,7 +29,7 @@ class Level:
 
         #sky
         self.rain = Rain(self.all_sprites)
-        self.raining = False
+        self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining #add to the level itself
     
     def setup(self):
@@ -97,8 +98,10 @@ class Level:
 
         #Soil
         self.soil_layer.remove_water()
-        #randomize the rain
+        self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining
+        if self.raining:
+            self.soil_layer.water_all()
 
         #apples on trees
         for tree in self.tree_sprites.sprites():
