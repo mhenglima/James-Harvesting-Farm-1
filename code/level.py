@@ -28,6 +28,9 @@ class Level:
     def setup(self):
         tmx_data = load_pygame('data/map.tmx')
 
+        # Reset tree sprites to ensure correct initialization
+        self.tree_sprites.empty()  # Clear any previous tree sprites
+
         #house
         for layer in ['HouseFloor', 'HouseFurnitureBottom']:
             for x, y, surf in tmx_data.get_layer_by_name(layer).tiles():
@@ -91,8 +94,8 @@ class Level:
                 for apple in tree.apple_sprites.sprites():
                     apple.kill()
             tree.create_fruit()
-        else:
-            print(f"Skipping non-tree object: {tree}") #debugging statement
+        #else:
+            #print(f"Skipping non-tree object")  # Print the type of the object
 
     def run(self, dt):
         self.display_surface.fill('black')

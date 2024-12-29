@@ -1,6 +1,7 @@
 import pygame, sys
 from settings import * 
 from level import Level
+import sys
 
 class Game:
     def __init__(self):
@@ -24,3 +25,5 @@ class Game:
 if __name__ == '__main__':
     game = Game()
     game.run()
+
+sys.dont_write_bytecode = True
