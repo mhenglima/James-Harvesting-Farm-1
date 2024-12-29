@@ -68,6 +68,9 @@ class SoilLayer():
                     #print('Farmable')
                     self.grid[y][x].append('X')  # Add 'X' to the list to indicate that it has been hit 
                     self.create_soil_tiles()
+                    if self.raining:
+                        self.water_all()
+
 
     #hit the soil with the water
     def water(self, target_pos): 
@@ -83,6 +86,20 @@ class SoilLayer():
                 pos = soil_sprites.rect.topleft
                 surf = choice(self.water_surfs)
                 WaterTile(pos, surf,[self.all_sprites, self.water_sprites])
+
+    def water_all(self):
+        # Go through all the lists 
+        for index_row, row in enumerate(self.grid):
+            # Go through the cells in the original list
+            for index_col, cell in enumerate(row):
+                if 'X' in cell and 'W' not in cell: #check if soil tile and not already watered, and therefore go and water
+                    cell.append('W')
+                    x = index_col * TILE_SIZE
+                    y = index_row * TILE_SIZE
+
+                    #water the tiles action
+                    WaterTile((x,y), choice(self.water_surfs), [self.all_sprites, self.water_sprites])
+
 
     def remove_water(self):
         #destroy all water sprites
