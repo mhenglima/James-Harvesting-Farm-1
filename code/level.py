@@ -94,8 +94,8 @@ class Level:
                 for apple in tree.apple_sprites.sprites():
                     apple.kill()
             tree.create_fruit()
-        #else:
-            #print(f"Skipping non-tree object")  # Print the type of the object
+        else:
+            print(f"Skipping non-tree object")  # Print the type of the object
 
     def run(self, dt):
         self.display_surface.fill('black')
