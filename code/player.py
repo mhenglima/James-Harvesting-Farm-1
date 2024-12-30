@@ -80,6 +80,29 @@ class Player(pygame.sprite.Sprite):
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
 
+    def harvest_crop(self):
+        """Harvest a crop only if it is fully grown and nearby."""
+        for plant in self.soil_layer.plant_sprites.sprites():
+            if plant.rect.collidepoint(self.target_pos):
+                if plant.age >= plant.max_age and plant.harvestable:  # Check if fully grown and harvestable
+                    # Add plant type to inventory
+                    if plant.plant_type in self.item_inventory:
+                        self.item_inventory[plant.plant_type] += 1
+                    else:
+                        self.item_inventory[plant.plant_type] = 1
+
+                    # Mark the soil tile as empty
+                    x = plant.soil.rect.x // TILE_SIZE
+                    y = plant.soil.rect.y // TILE_SIZE
+                    if 'P' in self.soil_layer.grid[y][x]:
+                        self.soil_layer.grid[y][x].remove('P')
+                    
+                    # Remove the harvested plant
+                    plant.kill()
+                    #print(f"Harvested {plant.plant_type}, Total: {self.item_inventory[plant.plant_type]}")
+            #else:
+                #print(f"{plant.plant_type} is not fully grown yet!")
+
     def use_seed(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:  # Check for Left Control key press
@@ -132,6 +155,10 @@ class Player(pygame.sprite.Sprite):
                 self.timers['tool use'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0 
+
+            # Crop Harvesting
+            if keys[pygame.K_a]:
+                self.harvest_crop()
 
             # change tool
             if keys[pygame.K_q] and not self.timers['tool switch'].active:
