@@ -52,7 +52,12 @@ class Player(pygame.sprite.Sprite):
             'corn':   0,
             'tomato': 0
         }
-        
+
+        self.seed_inventory = {
+                'corn': 5,
+                'tomato': 5
+            }
+        self.money = 200
 
         # Interaction
         self.tree_sprites = tree_sprites
