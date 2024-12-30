@@ -31,6 +31,7 @@ class Level:
         self.rain = Rain(self.all_sprites)
         self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining #add to the level itself
+        self.sky = Sky()
     
     def setup(self):
         tmx_data = load_pygame('data/map.tmx')
@@ -99,7 +100,6 @@ class Level:
         #plants
         self.soil_layer.update_plants()
 
-
         #Soil
         self.soil_layer.remove_water()
         self.raining = randint(0,10) > 3
@@ -116,6 +116,9 @@ class Level:
         else:
             print(f"Skipping non-tree object")  # Print the type of the object
 
+        #sky
+        self.sky.start_color = [255,255,255]
+
     def run(self, dt):
         self.display_surface.fill('black')
         self.all_sprites.custom_draw(self.player)
@@ -130,6 +133,9 @@ class Level:
         #rain
         if self.raining:
             self.rain.update()
+        
+        #daytime
+        self.sky.display(dt)
 
         pygame.display.update()
         #print(self.player.item_inventory)
