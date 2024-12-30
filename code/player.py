@@ -6,7 +6,7 @@ from sprites import Tree
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
         super().__init__(group)
 
         self.import_assets()
@@ -64,6 +64,7 @@ class Player(pygame.sprite.Sprite):
         self.interaction = interaction
         self.sleep = False
         self.soil_layer = soil_layer
+        self.toggle_shop = toggle_shop
 
     def use_tool(self):
         self.get_target_pos()
@@ -135,7 +136,6 @@ class Player(pygame.sprite.Sprite):
                     print("Cannot plant here! Tile is either not farmable or already occupied.")
             else:
                 print("Invalid tile position! Out of bounds.")
-
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -217,7 +217,7 @@ class Player(pygame.sprite.Sprite):
                 collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction,False)
                 if collided_interaction_sprite:
                     if collided_interaction_sprite[0].name == 'Trader':
-                        pass
+                        self.toggle_shop()
                     else:
                         self.status = 'left_idle'
                         self.sleep = True
