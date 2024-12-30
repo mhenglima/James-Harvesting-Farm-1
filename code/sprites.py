@@ -92,6 +92,9 @@ class Tree(Generic):
         self.apple_pos = APPLE_POS.get(name, [])  # Ensure APPLE_POS has the required name key
         self.apple_sprites = pygame.sprite.Group()
         self.player_add = player_add
+
+        #sounds
+        self.axe_sound = pygame.mixer.Sound('audio/axe.mp3')
         
         self.create_fruit()
         print(f"[DEBUG] Finished initializing Tree at {pos} with {len(self.apple_sprites)} apples.")
@@ -99,6 +102,10 @@ class Tree(Generic):
     def damage(self):
         # Tree takes damage
         self.health -= 1
+
+        #play sound
+        self.axe_sound.play()
+
         if self.apple_sprites:
             random_apple = choice(self.apple_sprites.sprites())
             self.create_particle_effect(random_apple)
