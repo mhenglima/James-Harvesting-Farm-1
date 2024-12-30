@@ -76,6 +76,11 @@ class SoilLayer():
         self.create_soil_grid()
         self.create_hit_rects()
 
+        #this is used to ensure the device name for used to initialize the mixer module of Pygame, 
+        #which handles playing sound effects and music. 
+        #This function prepares the Pygame audio system and sets up various options like sample rate, channels, and buffer sizes.
+        pygame.mixer.init(devicename="pygame.mixer.get_dev_info()")
+
         #sounds
         self.hoe_sound = pygame.mixer.Sound('audio/hoe.wav')
         self.hoe_sound.set_volume(0.1)
