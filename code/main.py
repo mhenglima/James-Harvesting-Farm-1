@@ -100,6 +100,8 @@ class Game:
             self.screen.blit(char_surface, (x_offset, SCREEN_HEIGHT - 40))
             x_offset += char_surface.get_width()  # Move X position for next character
 
+sys.dont_write_bytecode = True
+
 if __name__ == '__main__':
     game = Game()
     game.run()
