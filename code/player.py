@@ -47,10 +47,10 @@ class Player(pygame.sprite.Sprite):
 
         #Inventory
         self.item_inventory = {
-            'wood':   0,
-            'apple':  0,
-            'corn':   0,
-            'tomato': 0
+            'wood':   20,
+            'apple':  20,
+            'corn':   20,
+            'tomato': 20
         }
 
         self.seed_inventory = {
@@ -214,6 +214,7 @@ class Player(pygame.sprite.Sprite):
 
             #interact with bed
             if keys[pygame.K_RETURN]:
+                self.toggle_shop()
                 collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction,False)
                 if collided_interaction_sprite:
                     if collided_interaction_sprite[0].name == 'Trader':
