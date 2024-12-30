@@ -34,6 +34,7 @@ class Plant(pygame.sprite.Sprite):
         self.age = 0 
         self.max_age = len(self.frames) - 1
         self.grow_speed = GROW_SPEED[plant_type]
+        self.harvestable = True
 
         #sprites setup
         self.image = self.frames[self.age]
@@ -45,6 +46,10 @@ class Plant(pygame.sprite.Sprite):
         #each plant can access soil layer - find the soil if it contains a plant or not
         if self.check_watered(self.rect.center):
             self.age += self.grow_speed
+
+            if self.age >= self.max_age:
+                self.age = self.max_age
+                self.harvestable = True
 
             self.image = self.frames[int(self.age)]
             self.rect = self.image.get_rect(midbottom = self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
