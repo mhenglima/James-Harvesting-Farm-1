@@ -110,9 +110,32 @@ class Player(pygame.sprite.Sprite):
 
     def use_seed(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_r]:  # Check for Left Control key press
-            self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
-            #print(f"Planted {self.selected_seed} at {self.target_pos}")
+        if keys[pygame.K_r]:  # Check if the planting key is pressed (e.g., 'R')
+            # Calculate grid position and ensure it's an integer
+            x = int(self.target_pos[0] // TILE_SIZE)
+            y = int(self.target_pos[1] // TILE_SIZE)
+
+            # Check if the tile is plantable and not already occupied
+            if (0 <= y < len(self.soil_layer.grid)) and (0 <= x < len(self.soil_layer.grid[y])):
+                if ('F' in self.soil_layer.grid[y][x]) and ('P' not in self.soil_layer.grid[y][x]):
+                    if self.seed_inventory[self.selected_seed] > 0:
+                        # Plant the seed and update inventory
+                        self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+                        self.seed_inventory[self.selected_seed] -= 1  # Deduct one seed
+                        
+                        print(f"Planted {self.selected_seed}. Remaining: {self.seed_inventory[self.selected_seed]}")
+                        
+                        # Activate the seed use timer and reset animation frame
+                        self.timers['seed use'].activate()
+                        self.direction = pygame.math.Vector2()
+                        self.frame_index = 0
+                    else:
+                        print(f"No {self.selected_seed} seeds left to plant!")
+                else:
+                    print("Cannot plant here! Tile is either not farmable or already occupied.")
+            else:
+                print("Invalid tile position! Out of bounds.")
+
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -174,11 +197,11 @@ class Player(pygame.sprite.Sprite):
                 self.selected_tool = self.tools[self.tool_index]
 
             # seed use
-            if keys[pygame.K_LCTRL]:
+            '''if keys[pygame.K_LCTRL]:
                 self.timers['seed use'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0 
-                print('use seed')
+                print('use seed')'''
 
             # change seed
             if keys[pygame.K_e] and not self.timers['seed switch'].active:
