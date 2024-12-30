@@ -58,7 +58,6 @@ class Plant(pygame.sprite.Sprite):
             self.image = self.frames[int(self.age)]
             self.rect = self.image.get_rect(midbottom = self.soil.rect.midbottom + pygame.math.Vector2(0, self.y_offset))
 
-
 class SoilLayer():
     def __init__(self, all_sprites, collision_sprites):
         # sprite groups
@@ -76,6 +75,13 @@ class SoilLayer():
 
         self.create_soil_grid()
         self.create_hit_rects()
+
+        #sounds
+        self.hoe_sound = pygame.mixer.Sound('audio/hoe.wav')
+        self.hoe_sound.set_volume(0.1)
+        self.plant_sound = pygame.mixer.Sound('audio/plant.wav')
+        self.plant_sound.set_volume(0.1)
+
 
     # One list for every type of tile - Add capital 'F' if farmable
     def create_soil_grid(self):
@@ -102,6 +108,7 @@ class SoilLayer():
         # Convert rectangle position back to grid
         for rect in self.hit_rects:
             if rect.collidepoint(point):
+                self.hoe_sound.play()
                 x = rect.x // TILE_SIZE  # Floor divided by size of tile to get pixel position in the actual grid
                 y = rect.y // TILE_SIZE
 
@@ -162,7 +169,7 @@ class SoilLayer():
     def plant_seed(self, target_pos, seed):
         for soil_sprite in self.soil_sprites.sprites():
             if soil_sprite.rect.collidepoint(target_pos):
-
+                self.plant_sound.play()
                 x = soil_sprite.rect.x // TILE_SIZE
                 y = soil_sprite.rect.y // TILE_SIZE
                 if 'P' not in self.grid[y][x]:

@@ -20,7 +20,7 @@ class Game:
         
         # Randomly select a song from the list
         self.current_song_index = random.choice(range(len(self.song_list)))
-        self.is_playing = True
+        self.is_playing = False
         self.volume = 0.4  # Set initial volume level (0.0 to 1.0)
         
         pygame.mixer.music.load(self.song_list[self.current_song_index])

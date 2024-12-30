@@ -47,10 +47,10 @@ class Player(pygame.sprite.Sprite):
 
         #Inventory
         self.item_inventory = {
-            'wood':   20,
-            'apple':  20,
-            'corn':   20,
-            'tomato': 20
+            'wood':   0,
+            'apple':  0,
+            'corn':   0,
+            'tomato': 0
         }
 
         self.seed_inventory = {
@@ -65,6 +65,10 @@ class Player(pygame.sprite.Sprite):
         self.sleep = False
         self.soil_layer = soil_layer
         self.toggle_shop = toggle_shop
+
+        #sound
+        self.watering = pygame.mixer.Sound('audio/water.mp3')
+        self.watering.set_volume(0.2)
 
     def use_tool(self):
         self.get_target_pos()
@@ -82,6 +86,7 @@ class Player(pygame.sprite.Sprite):
         
         if self.selected_tool == 'water' and pygame.key.get_pressed()[pygame.K_SPACE]:
             self.soil_layer.water(self.target_pos)
+            self.watering.play()
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
@@ -214,7 +219,6 @@ class Player(pygame.sprite.Sprite):
 
             #interact with bed
             if keys[pygame.K_RETURN]:
-                self.toggle_shop()
                 collided_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction,False)
                 if collided_interaction_sprite:
                     if collided_interaction_sprite[0].name == 'Trader':
