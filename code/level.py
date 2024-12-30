@@ -137,6 +137,16 @@ class Level:
         #daytime
         self.sky.display(dt)
 
+        # Display Time of Day
+        time_of_day = self.sky.get_time_of_day()
+        font = pygame.font.SysFont('Comic Sans MS', 20)
+        time_text = font.render(f"Time of Day: {time_of_day}", True, (255, 255, 255))
+        # Calculate the position on the far right
+        text_rect = time_text.get_rect()
+        text_rect.topright = (SCREEN_WIDTH - 10, 10)  # 10px padding from the right and top
+
+        self.display_surface.blit(time_text, text_rect)
+
         pygame.display.update()
         #print(self.player.item_inventory)
 

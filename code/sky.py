@@ -19,6 +19,19 @@ class Sky():
         self.full_surf.fill(self.start_color)
         self.display_surface.blit(self.full_surf, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
+    def get_time_of_day(self):
+        """Determine the time of day based on screen darkening."""
+        avg_color = sum(self.start_color) / 3  # Average RGB value
+        
+        if avg_color > 200:
+            return "Morning"
+        elif avg_color > 150:
+            return "Afternoon"
+        elif avg_color > 100:
+            return "Evening"
+        else:
+            return "Night"
+
 class Drop(Generic):
     def __init__ (self, surf, pos, moving, groups, z):
 
