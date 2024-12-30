@@ -62,11 +62,25 @@ class Level:
         for x, y, surf in tmx_data.get_layer_by_name('Water').tiles():
             Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
 
-        #trees
+        # Trees
+        print("[DEBUG] Starting tree creation from TMX layer 'Trees'")
         for obj in tmx_data.get_layer_by_name('Trees'):
-            tree=Tree((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites, self.tree_sprites], obj.name, self.all_sprites,self.player_add)
+            print(f"[DEBUG] Processing object at ({obj.x}, {obj.y}), name: {getattr(obj, 'name', 'Unnamed Object')}")
+            if hasattr(obj, 'name') and obj.name in ['Small', 'Large']:  # Match against valid tree names
+                Tree(
+                    (obj.x, obj.y),
+                    obj.image,
+                    [self.all_sprites, self.collision_sprites, self.tree_sprites],
+                    obj.name,
+                    self.all_sprites,
+                    self.player_add
+                )
+                print(f"[DEBUG] Added Tree: {obj.name} at ({obj.x}, {obj.y})")
+            else:
+                print(f"[WARNING] Skipping non-tree object: {getattr(obj, 'name', 'Unnamed Object')} at ({obj.x}, {obj.y})")
 
-        self.tree_sprites.add(tree)  # Make sure you're adding the Tree object, not a Generic one
+        print(f"[DEBUG] Total trees added: {len(self.tree_sprites)}")
+
 
         #wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration'):
@@ -127,7 +141,7 @@ class Level:
                     apple.kill()
             tree.create_fruit()
         else:
-            print(f"Skipping non-tree object")  # Print the type of the object
+            print(f"Skipping non-tree objects")  # Print the type of the object
 
         #sky
         self.sky.start_color = [255,255,255]
@@ -194,3 +208,5 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.display_surface.blit(sprite.image, offset_rect)
+                    if isinstance(sprite, Tree):
+                        print(f"[DEBUG] Drawing Tree at {sprite.rect.topleft} on layer {layer_name}")
