@@ -77,13 +77,15 @@ class Player(pygame.sprite.Sprite):
         if self.selected_tool == 'water' and pygame.key.get_pressed()[pygame.K_SPACE]:
             self.soil_layer.water(self.target_pos)
 
-
     def get_target_pos(self):
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
 
     def use_seed(self):
-        pass
-        
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_r]:  # Check for Left Control key press
+            self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+            print(f"Planted {self.selected_seed} at {self.target_pos}")
+
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
                            'right_idle': [], 'left_idle': [], 'up_idle': [], 'down_idle': [],
