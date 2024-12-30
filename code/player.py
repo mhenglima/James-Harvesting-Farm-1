@@ -84,7 +84,7 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:  # Check for Left Control key press
             self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
-            print(f"Planted {self.selected_seed} at {self.target_pos}")
+            #print(f"Planted {self.selected_seed} at {self.target_pos}")
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],

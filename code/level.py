@@ -96,6 +96,10 @@ class Level:
 
     def reset(self):
 
+        #plants
+        self.soil_layer.update_plants()
+
+
         #Soil
         self.soil_layer.remove_water()
         self.raining = randint(0,10) > 3
