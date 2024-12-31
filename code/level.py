@@ -10,11 +10,14 @@ from soil import SoilLayer
 from sky import * 
 from random import *
 from menu import *
+from save_system import SaveSystem
+
 
 class Level:
     def __init__(self):
         #level to display to the main screen  - get display surface
         self.display_surface = pygame.display.get_surface() 
+        self.save_system = SaveSystem()
 
         #sprite groups (allte players, trees etc)
         self.all_sprites = CameraGroup()
@@ -108,8 +111,9 @@ class Level:
                     tree_sprites = self.tree_sprites,
                     interaction = self.interaction_sprites,
                     soil_layer = self.soil_layer,
-                    toggle_shop = self.toggle_shop)
-                
+                    toggle_shop = self.toggle_shop,
+                    level=self  # Pass the Level instance here)
+                )
             if obj.name == 'Bed':
                 Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name)
             
@@ -130,7 +134,6 @@ class Level:
         self.shop_active = not self.shop_active #turn on or off
 
     def reset(self):
-
         #plants
         self.soil_layer.update_plants()
 
@@ -152,6 +155,15 @@ class Level:
 
         #sky
         self.sky.start_color = [255,255,255]
+
+        """Save day progress before resetting the day."""
+        self.save_system.record_day(
+            day=self.save_system.data["current_day"],
+            inventory=self.player.item_inventory,
+            seed_inventory=self.player.seed_inventory,
+            money=self.player.money
+        )
+        print(f"Day {self.save_system.data['current_day']} progress saved!")
 
     def run(self, dt):
 

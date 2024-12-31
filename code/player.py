@@ -3,11 +3,39 @@ from settings import *
 from support import * 
 from timer1 import Timer
 from sprites import Tree
+from save_system import SaveSystem
+
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop, level):
         super().__init__(group)
+
+        # Store level reference
+        self.level = level  # Add this line to store the reference to Level
+        
+        self.save_system = SaveSystem()
+
+        # Default values
+        self.item_inventory = {
+            'wood': 0,
+            'apple': 0,
+            'corn': 0,
+            'tomato': 0
+        }
+        self.seed_inventory = {
+            'corn': 5,
+            'tomato': 5
+        }
+        self.money = 200
+
+        # Load last saved state if available
+        last_day = self.save_system.get_last_day()
+        if last_day:
+            self.item_inventory = last_day['inventory']
+            self.seed_inventory = last_day['seed_inventory']
+            self.money = last_day['money']
+            print(f"Loaded data from Day {last_day['day']}")
 
         self.import_assets()
         self.status = 'down_idle'
@@ -226,6 +254,8 @@ class Player(pygame.sprite.Sprite):
                     else:
                         self.status = 'left_idle'
                         self.sleep = True
+                        self.level.reset()  # Save progress and trigger reset
+
 
     def get_status(self):
         # if the player is not moving (idle):
