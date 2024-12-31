@@ -22,6 +22,7 @@ class SaveSystem:
             json.dump(self.data, file, indent=4)
 
     def record_day(self, day, inventory, seed_inventory, money):
+        print(f"[DEBUG] Saving Day {day}: Inventory={inventory}, Seeds={seed_inventory}, Money={money}")
         """Save the current day's inventory and money."""
         day_snapshot = {
             "day": day,

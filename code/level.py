@@ -134,6 +134,10 @@ class Level:
         self.shop_active = not self.shop_active #turn on or off
 
     def reset(self):
+
+        print("[DEBUG] Resetting day...")
+        print(f"Before Reset: Inventory: {self.player.item_inventory}, Seeds: {self.player.seed_inventory}, Money: {self.player.money}")
+
         #plants
         self.soil_layer.update_plants()
 
@@ -150,6 +154,8 @@ class Level:
                 for apple in tree.apple_sprites.sprites():
                     apple.kill()
             tree.create_fruit()
+        print(f"After Reset: Inventory: {self.player.item_inventory}, Seeds: {self.player.seed_inventory}, Money: {self.player.money}")
+
         '''else:
             print(f"Skipping non-tree objects")  # Print the type of the object'''
 
@@ -163,6 +169,7 @@ class Level:
             seed_inventory=self.player.seed_inventory,
             money=self.player.money
         )
+        print(f"[DEBUG] Day {self.save_system.data['current_day']} saved.")
         print(f"Day {self.save_system.data['current_day']} progress saved!")
 
     def run(self, dt):

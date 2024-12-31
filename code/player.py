@@ -153,9 +153,11 @@ class Player(pygame.sprite.Sprite):
             if (0 <= y < len(self.soil_layer.grid)) and (0 <= x < len(self.soil_layer.grid[y])):
                 if ('F' in self.soil_layer.grid[y][x]) and ('P' not in self.soil_layer.grid[y][x]):
                     if self.seed_inventory[self.selected_seed] > 0:
+                        print(f"[DEBUG] Planting {self.selected_seed}")
                         # Plant the seed and update inventory
                         self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
                         self.seed_inventory[self.selected_seed] -= 1  # Deduct one seed
+                        print(f"[DEBUG] Remaining Seeds: {self.seed_inventory[self.selected_seed]}")
                         
                         #print(f"Planted {self.selected_seed}. Remaining: {self.seed_inventory[self.selected_seed]}")
                         
