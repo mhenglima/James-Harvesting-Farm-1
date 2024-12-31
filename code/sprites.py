@@ -64,7 +64,7 @@ class Particle(Generic):
 
 class Tree(Generic):
     def __init__(self, pos, surf, groups, name, all_sprites, player_add):
-        print(f"[DEBUG] Initializing Tree at position: {pos}, with name: {name}")
+        #print(f"[DEBUG] Initializing Tree at position: {pos}, with name: {name}")
         super().__init__(pos, surf, groups)
         self.all_sprites = all_sprites
         
@@ -74,9 +74,9 @@ class Tree(Generic):
         stump_path = f'graphics/stumps/{"small" if name == "Small" else "large"}.png'
         try:
             self.stump_surf = pygame.image.load(stump_path).convert_alpha()
-            print(f"[DEBUG] Loaded stump image from: {stump_path}")
+            #print(f"[DEBUG] Loaded stump image from: {stump_path}")
         except FileNotFoundError:
-            print(f"Stump image not found: {stump_path}")
+            #print(f"Stump image not found: {stump_path}")
             self.stump_surf = pygame.Surface((50, 50))  # Placeholder
 
         self.invul_timer = Timer(200)
@@ -84,9 +84,9 @@ class Tree(Generic):
         # Apples and apple positions
         try:
             self.apple_surf = pygame.image.load('graphics/fruit/apple.png').convert_alpha()
-            print(f"[DEBUG] Loaded apple image.")
+            #print(f"[DEBUG] Loaded apple image.")
         except FileNotFoundError:
-            print("Apple image not found at 'graphics/fruit/apple.png'")
+            #print("Apple image not found at 'graphics/fruit/apple.png'")
             self.apple_surf = pygame.Surface((10, 10))  # Placeholder
 
         self.apple_pos = APPLE_POS.get(name, [])  # Ensure APPLE_POS has the required name key
@@ -97,7 +97,7 @@ class Tree(Generic):
         self.axe_sound = pygame.mixer.Sound('audio/axe.mp3')
         
         self.create_fruit()
-        print(f"[DEBUG] Finished initializing Tree at {pos} with {len(self.apple_sprites)} apples.")
+        #print(f"[DEBUG] Finished initializing Tree at {pos} with {len(self.apple_sprites)} apples.")
 
     def damage(self):
         # Tree takes damage
@@ -129,13 +129,13 @@ class Tree(Generic):
             self.player_add('wood')
 
     def create_fruit(self):
-        print(f"[DEBUG] Creating fruits for Tree at {self.rect.topleft}")
+        #print(f"[DEBUG] Creating fruits for Tree at {self.rect.topleft}")
         # Generate apples on the tree
         for pos in self.apple_pos:
             if randint(0, 10) < 4:  # 40% chance to spawn an apple
                 x = pos[0] + self.rect.left
                 y = pos[1] + self.rect.top
-                print(f"[DEBUG] Adding apple at ({x}, {y})")
+                #print(f"[DEBUG] Adding apple at ({x}, {y})")
                 apple = Generic(
                     pos=(x, y),
                     surf=self.apple_surf,
@@ -144,7 +144,7 @@ class Tree(Generic):
                 )
                 self.apple_sprites.add(apple)
                 self.all_sprites.add(apple)
-        print(f"[DEBUG] Total apples created: {len(self.apple_sprites)}")
+        #print(f"[DEBUG] Total apples created: {len(self.apple_sprites)}")
 
     def update(self, dt):
         if self.alive:

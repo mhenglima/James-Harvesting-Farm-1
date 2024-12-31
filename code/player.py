@@ -129,18 +129,18 @@ class Player(pygame.sprite.Sprite):
                         self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
                         self.seed_inventory[self.selected_seed] -= 1  # Deduct one seed
                         
-                        print(f"Planted {self.selected_seed}. Remaining: {self.seed_inventory[self.selected_seed]}")
+                        #print(f"Planted {self.selected_seed}. Remaining: {self.seed_inventory[self.selected_seed]}")
                         
                         # Activate the seed use timer and reset animation frame
                         self.timers['seed use'].activate()
                         self.direction = pygame.math.Vector2()
                         self.frame_index = 0
-                    else:
+                    '''else:
                         print(f"No {self.selected_seed} seeds left to plant!")
                 else:
                     print("Cannot plant here! Tile is either not farmable or already occupied.")
             else:
-                print("Invalid tile position! Out of bounds.")
+                print("Invalid tile position! Out of bounds.")'''
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -215,7 +215,7 @@ class Player(pygame.sprite.Sprite):
                 # if seed index > length of seeds => seed index to 0
                 self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0 
                 self.selected_seed = self.seeds[self.seed_index]
-                print(self.selected_seed)
+                #print(self.selected_seed)
 
             #interact with bed
             if keys[pygame.K_RETURN]:

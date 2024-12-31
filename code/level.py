@@ -69,9 +69,9 @@ class Level:
             Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
 
         # Trees
-        print("[DEBUG] Starting tree creation from TMX layer 'Trees'")
+        #print("[DEBUG] Starting tree creation from TMX layer 'Trees'")
         for obj in tmx_data.get_layer_by_name('Trees'):
-            print(f"[DEBUG] Processing object at ({obj.x}, {obj.y}), name: {getattr(obj, 'name', 'Unnamed Object')}")
+            #print(f"[DEBUG] Processing object at ({obj.x}, {obj.y}), name: {getattr(obj, 'name', 'Unnamed Object')}")
             if hasattr(obj, 'name') and obj.name in ['Small', 'Large']:  # Match against valid tree names
                 Tree(
                     (obj.x, obj.y),
@@ -81,11 +81,11 @@ class Level:
                     self.all_sprites,
                     self.player_add
                 )
-                print(f"[DEBUG] Added Tree: {obj.name} at ({obj.x}, {obj.y})")
+                '''print(f"[DEBUG] Added Tree: {obj.name} at ({obj.x}, {obj.y})")
             else:
                 print(f"[WARNING] Skipping non-tree object: {getattr(obj, 'name', 'Unnamed Object')} at ({obj.x}, {obj.y})")
 
-        print(f"[DEBUG] Total trees added: {len(self.tree_sprites)}")
+        print(f"[DEBUG] Total trees added: {len(self.tree_sprites)}")'''
 
 
         #wildflowers
@@ -147,8 +147,8 @@ class Level:
                 for apple in tree.apple_sprites.sprites():
                     apple.kill()
             tree.create_fruit()
-        else:
-            print(f"Skipping non-tree objects")  # Print the type of the object
+        '''else:
+            print(f"Skipping non-tree objects")  # Print the type of the object'''
 
         #sky
         self.sky.start_color = [255,255,255]
@@ -215,5 +215,5 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.display_surface.blit(sprite.image, offset_rect)
-                    if isinstance(sprite, Tree):
-                        print(f"[DEBUG] Drawing Tree at {sprite.rect.topleft} on layer {layer_name}")
+                    '''if isinstance(sprite, Tree):
+                        print(f"[DEBUG] Drawing Tree at {sprite.rect.topleft} on layer {layer_name}")'''
