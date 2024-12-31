@@ -1,0 +1,155 @@
+### 📊 **Analysis of Game Save Data (Day 1–16)**
+
+This JSON represents the **daily history** of your farming simulator game across **16 days**. Below is an in-depth analysis.
+
+---
+
+## 📅 **Key Observations by Day**
+
+| **Day** | **Inventory (Wood, Apple, Corn, Tomato)** | **Seed Inventory (Corn, Tomato)** | **Money** | **Observations** |
+|---------|-----------------------------------------|-----------------------------------|-----------|------------------|
+| **1**   | Wood: 3, Apple: 19, Corn: 4, Tomato: 2   | Corn: 1, Tomato: 2                | 200       | Initial state with inventory set. |
+| **2–4** | Wood: 3, Apple: 19, Corn: 4, Tomato: 2   | Corn: 1, Tomato: 2                | 200       | No changes detected. |
+| **5–14**| Wood: 3, Apple: 19, Corn: 4, Tomato: 2   | Corn: 1, Tomato: 2                | 198       | Money dropped by 2 on Day 5 and remained static for 10 days. |
+| **15–16**| Wood: 3, Apple: 19, Corn: 4, Tomato: 2  | Corn: 1, Tomato: 2                | 225       | Money increased by 27, inventory unchanged. |
+
+---
+
+## 🕵️‍♂️ **Detailed Observations**
+
+### 1️⃣ **Static Inventory (Days 1–16)**  
+- **Wood:** 3  
+- **Apple:** 19  
+- **Corn:** 4  
+- **Tomato:** 2  
+
+**Observation:**  
+- Across 16 days, **no inventory changes occurred** despite multiple day resets.  
+- This suggests **no new trees were cut, no crops were harvested, and no seeds were planted.**
+
+**Possible Cause:**  
+- The reset logic isn't triggering game-world updates (e.g., regenerating apples on trees or updating soil layers).  
+
+---
+
+### 2️⃣ **Static Seed Inventory (Days 1–16)**  
+- **Corn:** 1  
+- **Tomato:** 2  
+
+**Observation:**  
+- Seeds were **neither planted nor purchased.**  
+- Suggests a **lack of interaction with planting mechanics** or a failure in the seed-usage logic.
+
+**Possible Cause:**  
+- The logic for consuming seeds when planting might not be functioning correctly.  
+- The soil layer may not be updating or reflecting planting actions.
+
+---
+
+### 3️⃣ **Money Fluctuations**
+- **Day 5:** Money drops from **200 → 198**.  
+- **Day 6–14:** Money remains static at **198**.  
+- **Day 15:** Money jumps to **225** (+27).  
+
+**Observations:**  
+- The drop of 2 on **Day 5** suggests an expense (e.g., seed purchase or daily cost).  
+- The increase on **Day 15** suggests an income event (e.g., sale of goods or scripted increase).  
+- However, these financial changes have **no correlation to inventory changes**, which suggests **non-player-triggered events** (e.g., scripted money updates).  
+
+**Possible Cause:**  
+- The money logic might be hardcoded or event-driven rather than being tied to game mechanics (e.g., selling apples or corn).  
+
+---
+
+## 🛠️ **Root Cause Hypotheses**
+
+### 🐍 **1. Game State Not Resetting Properly on Day End**
+- Inventory and seed values are **not updated across days**.
+- `self.soil_layer.update_plants()` or tree regeneration (`Tree.create_fruit`) might not be functioning properly.
+
+### 🐍 **2. Save Function Called Twice During Reset**
+- Day increments may happen twice, but save states remain identical across days.
+
+### 🐍 **3. Player Actions Not Reflected in Save**
+- Actions like planting, harvesting, or cutting trees might not update the player inventory.
+
+---
+
+## ✅ **Recommendations for Debugging**
+
+### 1️⃣ **Log State During Reset**
+
+Add debug statements in **`level.py`** in the `reset` method to track each step.
+
+```python
+def reset(self):
+    print("[DEBUG] Resetting day...")
+    print(f"Before Reset: Inventory: {self.player.item_inventory}, Seeds: {self.player.seed_inventory}, Money: {self.player.money}")
+
+    self.save_system.record_day(
+        day=self.save_system.data["current_day"],
+        inventory=self.player.item_inventory,
+        seed_inventory=self.player.seed_inventory,
+        money=self.player.money
+    )
+
+    print(f"[DEBUG] Day {self.save_system.data['current_day']} saved.")
+```
+
+### 2️⃣ **Check Day Incrementation**
+- Verify if `self.save_system.data["current_day"]` increments **only once per reset**.
+
+### 3️⃣ **Verify Soil and Tree Logic**
+- Ensure these calls execute correctly during `reset()`:
+   ```python
+   self.soil_layer.update_plants()
+   self.soil_layer.remove_water()
+   for tree in self.tree_sprites.sprites():
+       tree.create_fruit()
+   ```
+
+### 4️⃣ **Validate Player Actions Are Captured**
+- Print the player's inventory after **harvesting crops**, **cutting trees**, or **buying seeds**:
+   ```python
+   print(f"[DEBUG] Player Inventory: {self.item_inventory}, Seeds: {self.seed_inventory}")
+   ```
+
+### 5️⃣ **Monitor Day Counter and Save Trigger**
+- Add a debug log in `SaveSystem.record_day`:
+   ```python
+   print(f"[DEBUG] Saving Day {day} with Inventory: {inventory}, Money: {money}")
+   ```
+
+---
+
+## 🎯 **Expected Outcome After Fix**
+1. **Dynamic Inventory Changes:**  
+   - Chopping trees increases wood.  
+   - Harvesting crops adjusts crop inventory.  
+   - Planting decreases seeds.  
+
+2. **Correct Money Adjustments:**  
+   - Money reflects player actions like buying seeds or selling crops.
+
+3. **One Day Advancement Per Reset:**  
+   - Each reset increments the day by **1**.
+
+4. **Daily Unique Snapshots in Save Data:**  
+   - Each day in the `daily_history` will show distinct states.
+
+---
+
+## 🐍 **Temporary Debugging Command**
+For quick monitoring, add this in `reset`:
+```python
+print(f"[DEBUG] Day {self.save_system.data['current_day']} - Inventory: {self.player.item_inventory}, Seeds: {self.player.seed_inventory}, Money: {self.player.money}")
+```
+
+---
+
+### 📣 **Next Steps**
+- Implement the suggested debug logs.
+- Play through a few days and observe the debug logs.
+- Share any new observations or logs.
+
+I'll help interpret them and refine your reset/save logic! 🚜✨💾

@@ -1,4 +1,229 @@
 {
-    "current_day": 1,
-    "daily_history": []
+    "current_day": 17,
+    "daily_history": [
+        {
+            "day": 1,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 200
+        },
+        {
+            "day": 2,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 200
+        },
+        {
+            "day": 3,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 200
+        },
+        {
+            "day": 4,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 200
+        },
+        {
+            "day": 5,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 6,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 7,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 8,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 9,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 10,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 11,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 12,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 13,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 14,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 198
+        },
+        {
+            "day": 15,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 225
+        },
+        {
+            "day": 16,
+            "inventory": {
+                "wood": 3,
+                "apple": 19,
+                "corn": 4,
+                "tomato": 2
+            },
+            "seed_inventory": {
+                "corn": 1,
+                "tomato": 2
+            },
+            "money": 225
+        }
+    ]
 }
