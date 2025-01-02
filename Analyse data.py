@@ -18,24 +18,31 @@ for day_data in data.get("daily_history", []):
     money.append(day_data.get("money", None))
     
     inventory = day_data.get("inventory", {})
-    for item, value in inventory.items():
-        if item not in inventory_data:
-            inventory_data[item] = []
-        inventory_data[item].append(value)
     
-    # Ensure missing inventory keys are appended with None for consistency
-    for existing_item in inventory_data.keys():
-        if existing_item not in inventory:
-            inventory_data[existing_item].append(None)
+    # Synchronize inventory keys
+    for item in inventory.keys():
+        if item not in inventory_data:
+            inventory_data[item] = [0] * (len(days) - 1)  # Pad for previous days
+        inventory_data[item].append(inventory[item])
+    
+    # Ensure every key in inventory_data matches the number of days
+    for item in inventory_data:
+        if len(inventory_data[item]) < len(days):
+            inventory_data[item].append(0)  # Fill missing days with zero
 
 # 📝 Create a DataFrame Dynamically
 df_data = {"Day": days, "Money": money}
 df_data.update(inventory_data)
 
+# Create the DataFrame
 df = pd.DataFrame(df_data)
 
 # Fill missing data with forward fill for smoother analysis
 df.ffill(inplace=True)
+
+# Debugging: Check DataFrame consistency
+print(df.head())
+print(df.info())
 
 # 💵 Calculate Spending Patterns
 df['Daily_Spending'] = df['Money'].diff().fillna(0)
@@ -48,7 +55,7 @@ output_folder = os.path.join(os.getcwd(), 'client')
 os.makedirs(output_folder, exist_ok=True)
 
 # 🛠️ Load Emoji-Supporting Font
-font_path = "C:/Windows/Fonts/seguiemj.ttf"  # Path to emoji font (Windows default)
+font_path = "C:/Windows/Fonts/seguiemj.ttf"
 if not os.path.exists(font_path):
     raise FileNotFoundError("Emoji font not found! Ensure 'Segoe UI Emoji' is installed.")
 
@@ -68,7 +75,7 @@ ax[0].grid(True, color='lightgray', linestyle='--')
 
 # 📦 Inventory Changes
 colors = ['#FF4500', '#32CD32', '#1E90FF', '#DA70D6']
-for idx, (resource, color) in enumerate(zip(inventory_data.keys(), colors)):
+for idx, (resource, color) in enumerate(zip(inventory_data.keys(), colors * (len(inventory_data) // len(colors) + 1))):
     ax[1].plot(df['Day'], df[resource], marker='o', linestyle='-', label=f'{resource.capitalize()}', color=color)
 ax[1].set_title('🧺 Your Farm Friends Collection 🧺', fontsize=16, color='#6A5ACD', fontproperties=emoji_font)
 ax[1].set_xlabel('📅 Day', fontsize=12, fontproperties=emoji_font)
@@ -79,7 +86,7 @@ ax[1].grid(True, color='lightgray', linestyle='--')
 # 📊 Save Plot
 output_file = os.path.join(output_folder, 'kids_farm_analysis.png')
 plt.tight_layout()
-plt.savefig(output_file, bbox_inches='tight', dpi=72)  # Reduced DPI
+plt.savefig(output_file, bbox_inches='tight', dpi=72)
 plt.close(fig)
 
 # 🧠 Recommendations for Kids Based on Inventory

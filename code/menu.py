@@ -33,7 +33,7 @@ class Menu:
         self.display_surface.blit(text_surf, text_rect)
 
     def setup(self):
-        
+
         # Dynamically refresh the options
         self.options = list(self.player.item_inventory.keys()) + list(self.player.seed_inventory.keys())
         self.sell_boarder = len(self.player.item_inventory) - 1
@@ -86,9 +86,9 @@ class Menu:
                         if current_item in SALE_PRICES:
                             self.player.item_inventory[current_item] -= 1
                             self.player.money += SALE_PRICES[current_item]
-                            print(f"Sold {current_item} for ${SALE_PRICES[current_item]}")
-                        else:
-                            print(f"[WARNING] No sale price defined for {current_item}")
+                            #print(f"Sold {current_item} for ${SALE_PRICES[current_item]}")
+                        #else:
+                            #print(f"[WARNING] No sale price defined for {current_item}")
 
                 #buy item
                 else:

@@ -164,11 +164,11 @@ class Player(pygame.sprite.Sprite):
             if (0 <= y < len(self.soil_layer.grid)) and (0 <= x < len(self.soil_layer.grid[y])):
                 if ('F' in self.soil_layer.grid[y][x]) and ('P' not in self.soil_layer.grid[y][x]):
                     if self.seed_inventory[self.selected_seed] > 0:
-                        print(f"[DEBUG] Planting {self.selected_seed}")
+                        #print(f"[DEBUG] Planting {self.selected_seed}")
                         # Plant the seed and update inventory
                         self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
                         self.seed_inventory[self.selected_seed] -= 1  # Deduct one seed
-                        print(f"[DEBUG] Remaining Seeds: {self.seed_inventory[self.selected_seed]}")
+                        #print(f"[DEBUG] Remaining Seeds: {self.seed_inventory[self.selected_seed]}")
                         
                         #print(f"Planted {self.selected_seed}. Remaining: {self.seed_inventory[self.selected_seed]}")
                         
@@ -281,15 +281,15 @@ class Player(pygame.sprite.Sprite):
         for obj in collided_objects:
             if hasattr(obj, 'name') and obj.name:
                 inventory_key = obj.name.lower().replace(' ', '_').strip()
-                print(f"[DEBUG] Raw Object Name: '{obj.name}' → Parsed Key: '{inventory_key}'")
+                #print(f"[DEBUG] Raw Object Name: '{obj.name}' → Parsed Key: '{inventory_key}'")
 
                 if inventory_key in self.item_inventory:
                     self.item_inventory[inventory_key] += 1
-                    print(f"[DEBUG] Collected {inventory_key}. Total: {self.item_inventory[inventory_key]}")
+                    '''print(f"[DEBUG] Collected {inventory_key}. Total: {self.item_inventory[inventory_key]}")
                 else:
                     print(f"[WARNING] Object '{inventory_key}' not found in inventory! Check spelling or hidden characters.")
             else:
-                print("[WARNING] Object has no valid name!")
+                print("[WARNING] Object has no valid name!")'''
 
 
 
