@@ -18,7 +18,7 @@ class Menu:
 
         #Entries
         self.options = list(self.player.item_inventory.keys()) + list(self.player.seed_inventory.keys())
-        self.sell_boarder = len(self.player.item_inventory) - 1
+        self.sell_boarder = len(self.options) - len(self.player.seed_inventory) - 1
         self.setup()
 
         #movement
@@ -33,6 +33,11 @@ class Menu:
         self.display_surface.blit(text_surf, text_rect)
 
     def setup(self):
+        
+        # Dynamically refresh the options
+        self.options = list(self.player.item_inventory.keys()) + list(self.player.seed_inventory.keys())
+        self.sell_boarder = len(self.player.item_inventory) - 1
+
         #create the text surfaces
         self.text_surfaces = []
         self.total_height = 0
@@ -76,9 +81,14 @@ class Menu:
 
                 #sell item
                 if self.index <= self.sell_boarder:
-                    if self.player.item_inventory[current_item] > 0:
-                        self.player.item_inventory[current_item] -= 1
-                        self.player.money += SALE_PRICES[current_item]
+                    current_item = self.options[self.index]
+                    if self.player.item_inventory.get(current_item, 0) > 0:
+                        if current_item in SALE_PRICES:
+                            self.player.item_inventory[current_item] -= 1
+                            self.player.money += SALE_PRICES[current_item]
+                            print(f"Sold {current_item} for ${SALE_PRICES[current_item]}")
+                        else:
+                            print(f"[WARNING] No sale price defined for {current_item}")
 
                 #buy item
                 else:

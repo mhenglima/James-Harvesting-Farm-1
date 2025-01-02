@@ -19,6 +19,8 @@ PLAYER_TOOL_OFFSET = {
 LAYERS = {
 	'water': 0,
 	'ground': 1,
+    'Farmable': 1.5,
+    'Objects': 1.75,
 	'soil': 2,
 	'soil water': 3,
 	'rain floor': 4,
@@ -41,11 +43,17 @@ GROW_SPEED = {
 }
 
 SALE_PRICES = {
-	'wood': 4,
-	'apple': 2,
-	'corn': 10,
-	'tomato': 20
+    'wood': 4,
+    'apple': 2,
+    'corn': 10,
+    'tomato': 20,
+    'orange_fish': 15,
+    'blue_fish': 20,
+    'starfish': 25,
+    'plastic_bag': 1,
+    'snail': 5
 }
+
 PURCHASE_PRICES = {
 	'corn': 4,
 	'tomato': 5

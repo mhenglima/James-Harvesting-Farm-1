@@ -15,7 +15,12 @@ class Overlay:
             'wood': pygame.image.load(f'{overlay_path}wood.png').convert_alpha(),
             'apple': pygame.image.load(f'{overlay_path}apple.png').convert_alpha(),
             'corn': pygame.image.load(f'{overlay_path}corn.png').convert_alpha(),
-            'tomato': pygame.image.load(f'{overlay_path}tomato.png').convert_alpha()
+            'tomato': pygame.image.load(f'{overlay_path}tomato.png').convert_alpha(),
+            #'Starfish': pygame.image.load(f'{overlay_path}starfish.png').convert_alpha(),
+            #'Plastic Bag': pygame.image.load(f'{overlay_path}plastic_bag.png').convert_alpha(),
+            #'Snail': pygame.image.load(f'{overlay_path}snail.png').convert_alpha(),
+            #'Blue Fish': pygame.image.load(f'{overlay_path}blue_fish.png').convert_alpha(),
+            #'Orange Fish': pygame.image.load(f'{overlay_path}orange_fish.png').convert_alpha()
         }
 
         # Adjust the size of the images (optional, based on your UI design)

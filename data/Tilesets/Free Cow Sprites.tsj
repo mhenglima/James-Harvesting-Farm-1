@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"..\/..\/..\/..\/..\/Downloads\/Sprout Lands - Sprites - Basic pack\/Characters\/Free Cow Sprites.png",
+ "imageheight":64,
+ "imagewidth":96,
+ "margin":0,
+ "name":"Free Cow Sprites",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.11.0",
+ "tileheight":64,
+ "tilewidth":64,
+ "type":"tileset",
+ "version":"1.10"
+}

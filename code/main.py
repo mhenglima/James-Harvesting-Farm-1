@@ -18,14 +18,15 @@ class Game:
             'One Direction - Night Changes.mp3'
         ]
         
-        # Randomly select a song from the list
+        # Randomly select a song from the list  
         self.current_song_index = random.choice(range(len(self.song_list)))
         self.is_playing = False
         self.volume = 0.4  # Set initial volume level (0.0 to 1.0)
         
         pygame.mixer.music.load(self.song_list[self.current_song_index])
         pygame.mixer.music.set_volume(self.volume)
-        pygame.mixer.music.play(loops=-1, start=0.0)
+        self.is_playing = False  # Music is initially paused
+        #pygame.mixer.music.play(loops=-1, start=0.0)
 
         # Use Comic Sans MS font with smaller size for song text
         self.font = pygame.font.SysFont('Comic Sans MS', 17)  # Even smaller font size
@@ -68,7 +69,10 @@ class Game:
         if self.is_playing:
             pygame.mixer.music.pause()
         else:
-            pygame.mixer.music.unpause()
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play(loops=-1, start=0.0)  # Start playing if not already playing
+            else:
+                pygame.mixer.music.unpause()
         self.is_playing = not self.is_playing
 
     def next_song(self):
@@ -83,22 +87,23 @@ class Game:
         pygame.mixer.music.set_volume(self.volume)
 
     def display_song_info(self):
-        """Display current song and volume information with rainbow text."""
-        # Remove the '.mp3' extension from the song name
-        song_name = self.song_list[self.current_song_index].replace('.mp3', '')
-        
-        # Display volume control above song name
-        volume_text = f'Volume: {int(self.volume * 100)}%'
-        volume_render = self.font.render(volume_text, True, (255, 255, 255))
-        self.screen.blit(volume_render, (SCREEN_WIDTH - 120, SCREEN_HEIGHT - 70))
+        """Display current song and volume information with rainbow text when music is playing."""
+        if self.is_playing:  # Only display if music is actively playing
+            # Remove the '.mp3' extension from the song name
+            song_name = self.song_list[self.current_song_index].replace('.mp3', '')
+            
+            # Display volume control above song name
+            volume_text = f'Volume: {int(self.volume * 100)}%'
+            volume_render = self.font.render(volume_text, True, (255, 255, 255))
+            self.screen.blit(volume_render, (SCREEN_WIDTH - 120, SCREEN_HEIGHT - 70))
 
-        # Display the song name with rainbow effect
-        x_offset = SCREEN_WIDTH - 300  # Starting X position for text (adjusted to right side)
-        for i, char in enumerate(song_name):
-            color = self.rainbow_colors[i % len(self.rainbow_colors)]  # Cycle through rainbow colors
-            char_surface = self.font.render(char, True, color)
-            self.screen.blit(char_surface, (x_offset, SCREEN_HEIGHT - 40))
-            x_offset += char_surface.get_width()  # Move X position for next character
+            # Display the song name with rainbow effect
+            x_offset = SCREEN_WIDTH - 300  # Starting X position for text (adjusted to right side)
+            for i, char in enumerate(song_name):
+                color = self.rainbow_colors[i % len(self.rainbow_colors)]  # Cycle through rainbow colors
+                char_surface = self.font.render(char, True, color)
+                self.screen.blit(char_surface, (x_offset, SCREEN_HEIGHT - 40))
+                x_offset += char_surface.get_width()  # Move X position for next character
 
 sys.dont_write_bytecode = True
 

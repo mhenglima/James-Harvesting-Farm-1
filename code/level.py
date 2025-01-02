@@ -90,10 +90,48 @@ class Level:
 
         print(f"[DEBUG] Total trees added: {len(self.tree_sprites)}")'''
 
+        # Cows
+        for obj in tmx_data.get_layer_by_name('Objects'):
+            if obj.name == 'Cows':
+                print(f"[DEBUG] Adding Cow at ({obj.x}, {obj.y})")
+                cow_image = pygame.image.load('graphics/objects/Free Cow Sprites.png').convert_alpha()
+                cow_image = pygame.transform.scale(cow_image, (64, 64))  # Scale sprite to tile size
+                Generic(
+                    pos=(obj.x, obj.y),
+                    surf=cow_image,
+                    groups=self.all_sprites,
+                    z=LAYERS['main']
+                )
+
+        # Load Fish and Object Layer
+        for obj in tmx_data.get_layer_by_name('Objects'):
+            if hasattr(obj, 'name') and obj.name in ['Starfish', 'Plastic Bag', 'Snail', 'Blue Fish', 'Orange Fish']:
+                print(f"[DEBUG] Object Found: {obj.name} at ({obj.x}, {obj.y}) with size ({obj.width}, {obj.height})")
+
+                if obj.image:  # Ensure the object has an image
+                    object_image = pygame.transform.scale(
+                        obj.image,
+                        (int(obj.width), int(obj.height))
+                    )
+                    
+                    Generic(
+                        pos=(obj.x, obj.y),
+                        surf=object_image,
+                        groups=[self.all_sprites, self.interaction_sprites],
+                        z=LAYERS['Objects'],  # Ensure objects are above the ground layer
+                        name=obj.name  # Ensure name is passed correctly
+                    )
+                else:
+                    print(f"[ERROR] Object {obj.name} has no image associated with it!")
 
         #wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration'):
             WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
+
+        # Farmable Layer
+        for x, y, surf in tmx_data.get_layer_by_name('Farmable').tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites, LAYERS['ground'])
+        
 
         #collusions tiles
         for x, y, surf in tmx_data.get_layer_by_name('Collision').tiles():

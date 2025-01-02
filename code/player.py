@@ -21,8 +21,14 @@ class Player(pygame.sprite.Sprite):
             'wood': 0,
             'apple': 0,
             'corn': 0,
-            'tomato': 0
+            'tomato': 0,
+            'orange_fish': 0,
+            'starfish': 0,
+            'plastic_bag': 0,
+            'snail': 0,
+            'blue_fish': 0
         }
+
         self.seed_inventory = {
             'corn': 5,
             'tomato': 5
@@ -75,10 +81,15 @@ class Player(pygame.sprite.Sprite):
 
         #Inventory
         self.item_inventory = {
-            'wood':   0,
-            'apple':  0,
-            'corn':   0,
-            'tomato': 0
+            'wood': 0,
+            'apple': 0,
+            'corn': 0,
+            'tomato': 0,
+            'orange_fish': 0,
+            'blue_fish': 0,
+            'starfish': 0,
+            'plastic_bag': 0,
+            'snail': 0
         }
 
         self.seed_inventory = {
@@ -223,6 +234,11 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_a]:
                 self.harvest_crop()
 
+            # Pick up items
+            if keys[pygame.K_f]:  # Use 'F' to pick up items
+                self.pickup_object()
+
+
             # change tool
             if keys[pygame.K_q] and not self.timers['tool switch'].active:
                 self.timers['tool switch'].activate()
@@ -257,6 +273,24 @@ class Player(pygame.sprite.Sprite):
                         self.status = 'left_idle'
                         self.sleep = True
                         self.level.reset()  # Save progress and trigger reset
+
+    def pickup_object(self):
+        """Allow the player to pick up objects like fish, starfish, etc."""
+        collided_objects = pygame.sprite.spritecollide(self, self.interaction, True)
+
+        for obj in collided_objects:
+            if hasattr(obj, 'name') and obj.name:
+                inventory_key = obj.name.lower().replace(' ', '_').strip()
+                print(f"[DEBUG] Raw Object Name: '{obj.name}' → Parsed Key: '{inventory_key}'")
+
+                if inventory_key in self.item_inventory:
+                    self.item_inventory[inventory_key] += 1
+                    print(f"[DEBUG] Collected {inventory_key}. Total: {self.item_inventory[inventory_key]}")
+                else:
+                    print(f"[WARNING] Object '{inventory_key}' not found in inventory! Check spelling or hidden characters.")
+            else:
+                print("[WARNING] Object has no valid name!")
+
 
 
     def get_status(self):

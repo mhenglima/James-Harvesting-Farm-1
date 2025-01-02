@@ -4,12 +4,15 @@ from random import randint, choice
 from timer1 import Timer
 
 class Generic(pygame.sprite.Sprite):
-    def __init__(self, pos, surf, groups, z=LAYERS['main']):
+    def __init__(self, pos, surf, groups, z=LAYERS['main'], name = None):
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_rect(topleft=pos)
         self.z = z
         self.hitbox = self.rect.copy().inflate((-self.rect.width * 0.2, -self.rect.height * 0.75))  # Small width, vertical access needs overlap
+        self.name = name  # Add a name attribute
+
+
 
 class Interaction(Generic):
     def __init__(self, pos, size, groups, name):
