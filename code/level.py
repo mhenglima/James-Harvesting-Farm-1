@@ -11,6 +11,7 @@ from sky import *
 from random import *
 from menu import *
 from save_system import SaveSystem
+from animals import *
 
 
 class Level:
@@ -70,6 +71,12 @@ class Level:
         water_frames = import_folder('graphics/water')
         for x, y, surf in tmx_data.get_layer_by_name('Water').tiles():
             Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites, LAYERS['water'])
+
+        # Inside Level.setup():
+        for obj in tmx_data.get_layer_by_name('Objects'):
+            if obj.name == 'Giraffe':
+                print(f"[DEBUG] Adding Giraffe at ({obj.x}, {obj.y})")
+                Giraffe(pos=(obj.x, obj.y), group=self.all_sprites)
 
         # Trees
         #print("[DEBUG] Starting tree creation from TMX layer 'Trees'")
