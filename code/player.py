@@ -81,10 +81,10 @@ class Player(pygame.sprite.Sprite):
 
         #Inventory
         self.item_inventory = {
-            'wood': 0,
-            'apple': 0,
-            'corn': 0,
-            'tomato': 0,
+            'wood': SaveSystem.wood_cnt,
+            'apple': SaveSystem.apple_cnt,
+            'corn': SaveSystem.corn_cnt,
+            'tomato': SaveSystem.tomato_cnt,
             'orange_fish': 0,
             'blue_fish': 0,
             'starfish': 0,

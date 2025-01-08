@@ -14,7 +14,10 @@ from save_system import SaveSystem
 from animals import *
 
 
+
+
 class Level:
+
     def __init__(self):
         #level to display to the main screen  - get display surface
         self.display_surface = pygame.display.get_surface() 
@@ -217,8 +220,8 @@ class Level:
         #print(f"[DEBUG] Day {self.save_system.data['current_day']} saved.")
         #print(f"Day {self.save_system.data['current_day']} progress saved!")
 
-    def run(self, dt):
-
+    def run(self, dt, player_name):
+      
         #drawing logic
         self.display_surface.fill('black')
         self.all_sprites.custom_draw(self.player)
@@ -244,11 +247,22 @@ class Level:
 
         # Display Time of Day
         time_of_day = self.sky.get_time_of_day()
+       
+
         font = pygame.font.SysFont('Comic Sans MS', 20)
+        player_text = font.render(f"Player: {player_name}", True, (255, 255, 255))
         time_text = font.render(f"Time of Day: {time_of_day}", True, (255, 255, 255))
-        # Calculate the position on the far right
+        
+
+         # Calculate the position on the far right
         text_rect = time_text.get_rect()
         text_rect.topright = (SCREEN_WIDTH - 10, 10)  # 10px padding from the right and top
+
+        player_text_rect = player_text.get_rect()
+        player_text_rect.topright = (SCREEN_WIDTH - 10, 40) 
+
+
+        self.display_surface.blit(player_text, player_text_rect)
 
         self.display_surface.blit(time_text, text_rect)
 

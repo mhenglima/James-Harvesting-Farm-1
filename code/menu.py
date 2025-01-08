@@ -2,6 +2,8 @@ import pygame
 from settings import *
 from timer1 import *
 
+
+
 class Menu:
     def __init__(self, player, toggle_menu):
 
